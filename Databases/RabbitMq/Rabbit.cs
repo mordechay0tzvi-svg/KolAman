@@ -10,15 +10,12 @@ public class RabbitMqService
     public RabbitMqService(IConfiguration configuration)
     {
         var host = configuration["Rabbit:host"] ?? "localhost";
-        var user = configuration["Rabbit:user"] ?? "guest";
         var factory = new ConnectionFactory
         {
             HostName = host,
-            UserName = user
         };
         _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
     }
-
     public async Task ConsumeAsync(string queue)
     {
         var channel = await _connection.CreateChannelAsync();
