@@ -11,4 +11,5 @@ public class Alert
     public double lon {get; set;}
     public DateTime timestamp {get; set;}
     public string status {get; set;} = string.Empty;
+    public string region {get; set;} = string.Empty;
 }

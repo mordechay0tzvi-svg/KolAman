@@ -10,8 +10,8 @@ builder.Services.AddSingleton<MongoService>();
 builder.Services.AddSingleton<RabbitMqService>();
 var app = builder.Build();
 
-var kafka = app.Services.GetRequiredService<MongoService>();
-var mongo = app.Services.GetRequiredService<RabbitMqService>();
+var mongo = app.Services.GetRequiredService<MongoService>();
+var rabbit = app.Services.GetRequiredService<RabbitMqService>();
 
 while (true)
 {
