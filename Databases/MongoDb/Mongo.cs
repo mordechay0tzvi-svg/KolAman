@@ -23,4 +23,4 @@ public class MongoService : IMongoService
         var collection = GetCollection<T>(collectionName);
         await collection.InsertOneAsync(document);
     }
-}
+}   
