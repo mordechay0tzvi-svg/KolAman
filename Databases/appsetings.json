@@ -1,4 +1,9 @@
 {
-    "MongoDb":"localhost://mongo:27017",
-    "database":"alerts"
+    "MongoDb":{
+        "connectionString":"localhost://mongo:27017",
+        "database":"alerts"},
+        "Rabbit":{
+            "host":"localhost",
+            "user":"guest"
+        }
 }
