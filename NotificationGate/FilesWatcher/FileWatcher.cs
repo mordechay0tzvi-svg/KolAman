@@ -19,14 +19,12 @@ class FileWatcher
 
         _watcher.IncludeSubdirectories = true;
         _watcher.EnableRaisingEvents = true;
-        
-        _watcher.Created += new FileSystemEventHandler(OnCreated);
     }
     private static void OnCreated(object sender, FileSystemEventArgs e)
     {
         string value = $"Created: {e.FullPath}";
         Console.WriteLine(value);
-        _whereCreatedFilePath = value;
+        _whereCreatedFilePath = e.FullPath;
     }
     public static string _whereCreatedFilePath;
     public string WhereCreated()
