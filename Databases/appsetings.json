@@ -1,0 +1,4 @@
+{
+    "MongoDb":"localhost://mongo:27017",
+    "database":"alerts"
+}

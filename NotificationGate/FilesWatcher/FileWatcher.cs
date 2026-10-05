@@ -4,6 +4,7 @@ class FileWatcher
     FileSystemWatcher _watcher = new FileSystemWatcher();
     public FileWatcher(string dirPath)
     {
+        _watcher.InternalBufferSize = 65536;
         _watcher.Path = dirPath;
         _watcher.NotifyFilter = NotifyFilters.Attributes
                                 | NotifyFilters.CreationTime
@@ -19,6 +20,9 @@ class FileWatcher
 
         _watcher.IncludeSubdirectories = true;
         _watcher.EnableRaisingEvents = true;
+
+        Console.WriteLine("Press enter to exit.");
+        Console.ReadLine();
     }
     private static void OnCreated(object sender, FileSystemEventArgs e)
     {
@@ -26,9 +30,9 @@ class FileWatcher
         Console.WriteLine(value);
         _whereCreatedFilePath = e.FullPath;
     }
-    public static string _whereCreatedFilePath;
+    static string? _whereCreatedFilePath;
     public string WhereCreated()
     {
-        return _whereCreatedFilePath;
+        return _whereCreatedFilePath ?? "";
     }
 }
