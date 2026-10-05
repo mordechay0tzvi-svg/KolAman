@@ -3,7 +3,6 @@ using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Configuration;
-
 public class RabbitMqService 
 {
     private readonly IConnection _connection;

@@ -15,6 +15,6 @@ var rabbit = app.Services.GetRequiredService<RabbitMqService>();
 
 while (true)
 {
-    
+   var result = await rabbit.ConsumeAsync(); 
 }
 

@@ -3,7 +3,6 @@
         "connectionString":"localhost://mongo:27017",
         "database":"alerts"},
         "Rabbit":{
-            "host":"localhost",
-            "user":"guest"
-        }
+            "host":"localhost"
+            }
 }

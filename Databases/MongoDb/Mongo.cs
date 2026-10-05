@@ -1,26 +1,18 @@
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using Models;
 namespace Mongo;
-public class MongoService : IMongoService
+public class MongoService 
 {
-    private readonly IMongoDatabase _database;
+    private readonly IMongoDatabase _service;
     public MongoService(IConfiguration configuration)
     {
-        var client = new MongoClient(configuration.GetConnectionString("MongoDb:connectionString"));
-        _database = client.GetDatabase(configuration["MongoDb:Database"]);
+        var client = new MongoClient(configuration["MongoDb:connectionString"]);
+        _service = client.GetDatabase(configuration["MongoDb:database"]);
     }
-    public IMongoCollection<T> GetCollection<T>(string collectionName)
-    {
-        return _database.GetCollection<T>(collectionName);
-    }
-    public async Task<T?> FindByIdAsync<T>(string collectionName, string id)
-    {
-        var collection = GetCollection<T>(collectionName);
-        return await collection.Find(Builders<T>.Filter.Eq("_id", id)).FirstOrDefaultAsync();
-    }
-    public async Task InsertAsync<T>(string collectionName,T document)
-    {
-        var collection = GetCollection<T>(collectionName);
-        await collection.InsertOneAsync(document);
-    }
-}   
+    public IMongoCollection<Alert> North => _service.GetCollection<Alert>("north");
+    public IMongoCollection<Alert> South => _service.GetCollection<Alert>("south");
+    public IMongoCollection<Alert> Center => _service.GetCollection<Alert>("center");
+    public IMongoCollection<Alert>  Overseas => _service.GetCollection<Alert>("overseas");
+}
+
