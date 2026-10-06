@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-string? connectionString = builder.Configuration.GetConnectionString("MySql:Connection");
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 ServerVersion? serverVersion =  ServerVersion.AutoDetect(connectionString);
 builder.Services.AddDbContext<Context>(options => options.UseMySql(connectionString,serverVersion));
 
