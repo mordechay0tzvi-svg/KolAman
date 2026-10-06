@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-string? connectionString = builder.Configuration.GetConnectionString("ConnectionStrings:DefaultConnection");
+string? connectionString = builder.Configuration.GetConnectionString("MySql:Connection");
 ServerVersion? serverVersion =  ServerVersion.AutoDetect(connectionString);
-builder.Services.AddDbContext<Context>(options => options.UseMySql(connectionString,serverVersion));builder.Services.AddSingleton<Context>();
+builder.Services.AddDbContext<Context>(options => options.UseMySql(connectionString,serverVersion));
 
 builder.Services.AddScoped<IAlertHandler>(sp => new SouthHandler(sp.GetRequiredService<Context>()));
 builder.Services.AddScoped<IAlertHandler>(sp => new NorthHandler(sp.GetRequiredService<Context>()));
@@ -32,7 +32,7 @@ var NorthTask = Task.Run(async () =>
 });
 var CenterTask = Task.Run(async () =>
 {
-    using var scope = app.Services.CreateScope();
+   using var scope = app.Services.CreateScope();
    var handler = scope.ServiceProvider.GetRequiredService<CenterHandler>();
    await handler.HandleAsync();
 });

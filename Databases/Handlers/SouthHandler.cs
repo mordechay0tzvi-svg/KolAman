@@ -6,6 +6,8 @@ using RabbitMQ.Client.Events;
 using MySqlContext;
 using System.Text;
 using System.Text.Json;
+using MongoDB.Bson;
+
 public class SouthHandler : IAlertHandler
 {
     private readonly Context _context;
@@ -30,7 +32,7 @@ public class SouthHandler : IAlertHandler
         while (true)
         {
             var result = await channel.BasicConsumeAsync("SOUTH", autoAck: true, consumer: consumer);
-            var alert = JsonSerializer.Deserialize<Alert>(result);
+            var alert = JsonSerializer.Deserialize<Alert>(result.ToJson());
             if (alert != null)
             {
                 _context.SouthAlerts.Add(alert);

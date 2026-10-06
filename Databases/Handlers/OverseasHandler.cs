@@ -6,6 +6,8 @@ using RabbitMQ.Client.Events;
 using MySqlContext;
 using System.Text;
 using System.Text.Json;
+using MongoDB.Bson;
+
 public class OverseasHandler : IAlertHandler
 {
     private readonly Context _context;
@@ -30,7 +32,7 @@ public class OverseasHandler : IAlertHandler
         while (true)
         {
             var result = await channel.BasicConsumeAsync("OVERSEAS", autoAck: true, consumer: consumer);
-            var alert = JsonSerializer.Deserialize<Alert>(result);
+            var alert = JsonSerializer.Deserialize<Alert>(result.ToJson());
             if (alert != null)
             {
                 _context.OverseasAlerts.Add(alert);

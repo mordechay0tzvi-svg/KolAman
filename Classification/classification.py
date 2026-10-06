@@ -11,7 +11,7 @@ localHost = "localhost"
 kafkaConnection = "localhost:9092"
 kafkaTopic = "alerts"
 redisKey = "alerts"
-
+exchange = "alerts"
 
 validPriority = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
 validClassification = ["UNCLASSIFIED", "RESTRICTED", "SECRET", "TOP_SECRET"]
@@ -59,7 +59,7 @@ def is_alert_data_valid(data) -> str:
     return result
 
 while True:
-    msg = consumer.poll(10)
+    msg = consumer.poll()
     if msg is None:
         break
 
@@ -73,12 +73,12 @@ while True:
         print("skipped alert")
         continue # + dont forget log!
 
-    if redis_client.exists(f"{data}"):
+    if redis_client.exists(f"{data["alert_id"]}"):
         consumer.commit(msg)
         print("already in redis")
         continue #log!
 
-    redis_client.set(name= redisKey, value= json.dumps(data), ex= 10)
+    redis_client.set(name= redisKey, value= json.dumps(data["alert_id"]), ex= 20)
     print("set into redis")
 
     channel.basic_publish(exchange="", routing_key= f"{region}", body=json.dumps(data))

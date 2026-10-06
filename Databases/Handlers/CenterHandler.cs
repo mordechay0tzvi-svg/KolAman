@@ -1,10 +1,12 @@
-namespace Handlers;
 using Models;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using MySqlContext;
 using System.Text;
+namespace Handlers;
+using MySqlContext;
+using RabbitMQ.Client;
 using System.Text.Json;
+using RabbitMQ.Client.Events;
+using MongoDB.Bson;
+
 public class CenterHandler : IAlertHandler
 {
     private readonly Context _context;
@@ -29,7 +31,7 @@ public class CenterHandler : IAlertHandler
         while (true)
         {
             var result = await channel.BasicConsumeAsync("CENTER", autoAck: true, consumer: consumer);
-            var alert = JsonSerializer.Deserialize<Alert>(result);
+            var alert = JsonSerializer.Deserialize<Alert>(result.ToJson());
             if (alert != null)
             {
                 _context.CenterAlerts.Add(alert);
