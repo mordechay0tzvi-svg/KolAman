@@ -1,12 +1,11 @@
-namespace Handlers;
 using Models;
-using RabbitMQ;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using MySqlContext;
 using System.Text;
+using MySqlContext;
+using RabbitMQ.Client;
 using System.Text.Json;
+using RabbitMQ.Client.Events;
 using Elastic.Clients.Elasticsearch;
+namespace Handlers;
 public class NorthHandler : IAlertHandler
 {
     private readonly ElasticsearchClient _es;
@@ -32,8 +31,8 @@ public class NorthHandler : IAlertHandler
         };
         while (true)
         {
-            try
-            {   
+            // try
+            // {   
                 var result = await channel.BasicConsumeAsync("NORTH", autoAck: true, consumer: consumer);
                 var alert = JsonSerializer.Deserialize<Alert>(result);
                 if (alert != null)
@@ -47,7 +46,8 @@ public class NorthHandler : IAlertHandler
                         Timestamp = DateTime.Now
                         }, x => x.Index("logs").Id(1));
                     }
-                    _context.NorthAlerts.Add(alert);
+                    await _context.NorthAlerts.AddAsync(alert);
+                    await _context.SaveChangesAsync();
                     continue;
                 }
                 await _es.IndexAsync(new {
@@ -56,17 +56,17 @@ public class NorthHandler : IAlertHandler
                         Content = "failed to read alert",
                         Timestamp = DateTime.Now
                         }, x => x.Index("logs").Id(1));
-            }
-            catch(Exception e)
-            {
-                await _es.IndexAsync(new {
-                        Level = "Warning",
-                        Source = "North db handler ",
-                        Content = $"{e.Message}",
-                        Timestamp = DateTime.Now
-                        }, x => x.Index("logs").Id(1));
-                continue;
-            }
+            // }
+            // catch(Exception e)
+            // {
+            //     await _es.IndexAsync(new {
+            //             Level = "Warning",
+            //             Source = "North db handler ",
+            //             Content = $"{e.Message}",
+            //             Timestamp = DateTime.Now
+            //             }, x => x.Index("logs").Id(1));
+            //     continue;
+            // }
         }
     }
 }

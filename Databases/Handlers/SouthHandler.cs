@@ -1,14 +1,11 @@
-namespace Handlers;
 using Models;
-using RabbitMQ;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using MySqlContext;
 using System.Text;
+using MySqlContext;
+using RabbitMQ.Client;
 using System.Text.Json;
+using RabbitMQ.Client.Events;
 using Elastic.Clients.Elasticsearch;
-using Microsoft.Extensions.Configuration;
-
+namespace Handlers;
 public class SouthHandler : IAlertHandler
 {
     private readonly ElasticsearchClient _es;
@@ -36,7 +33,7 @@ public class SouthHandler : IAlertHandler
         {
             try
             {
-                var result = await channel.BasicConsumeAsync("SOUTH", autoAck: true, consumer: consumer);
+                string result = await channel.BasicConsumeAsync("SOUTH", autoAck: true, consumer: consumer);
                 var alert = JsonSerializer.Deserialize<Alert>(result);
                 if (alert != null)
                 {
@@ -49,7 +46,8 @@ public class SouthHandler : IAlertHandler
                         Timestamp = DateTime.Now
                         }, x => x.Index("logs").Id(1));
                     }
-                    _context.SouthAlerts.Add(alert);
+                    await _context.SouthAlerts.AddAsync(alert);
+                    await _context.SaveChangesAsync();
                     continue;
                 }
                 await _es.IndexAsync(new {
