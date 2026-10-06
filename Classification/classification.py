@@ -1,17 +1,20 @@
 import geopandas as gpd
 from shapely.geometry import Point
 from confluent_kafka import Consumer
+from elasticsearch import Elasticsearch
+import datetime
 import json
 import pika
 import redis
 import random
 
 regions_path = "regions.geojson"
-localHost = "localhost"
-kafkaConnection = "localhost:9092"
-kafkaTopic = "alerts"
-redisKey = "alerts"
+local_host = "localhost"
+kafka_connection = "localhost:9092"
+kafka_topic = "alerts"
+redis_key = "alerts"
 exchange = "alerts"
+elastic_uri = "http://localhost:9200"
 
 validPriority = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
 validClassification = ["UNCLASSIFIED", "RESTRICTED", "SECRET", "TOP_SECRET"]
@@ -27,8 +30,8 @@ def get_region_with_geopandas(file_path: str, lon: float, lat: float) -> str:
         return matched.iloc[0]["region"]
     return "OVERSEAS"
 
-redis_client = redis.Redis(host=localHost, port=6379, decode_responses=True)
-connection = pika.BlockingConnection(pika.ConnectionParameters(localHost))
+redis_client = redis.Redis(host=local_host, port=6379, decode_responses=True)
+connection = pika.BlockingConnection(pika.ConnectionParameters(local_host))
 channel = connection.channel()
 
 channel.queue_declare(queue="NORTH", durable=True)
@@ -37,10 +40,10 @@ channel.queue_declare(queue="SOUTH", durable=True)
 channel.queue_declare(queue="OVERSEAS", durable=True)
 
 consumer = Consumer({
-        "bootstrap.servers": kafkaConnection,
+        "bootstrap.servers": kafka_connection,
         "group.id": "new" + str(random.random()),
         "auto.offset.reset": "earliest"})
-consumer.subscribe([kafkaTopic])
+consumer.subscribe([kafka_topic])
 
 def is_alert_data_valid(data) -> str:
     result = ""
@@ -57,6 +60,8 @@ def is_alert_data_valid(data) -> str:
     if data["source"] not in validSource:
         result += "invalid source"
     return result
+
+es = Elasticsearch()
 
 while True:
     msg = consumer.poll()
@@ -76,9 +81,14 @@ while True:
     if redis_client.exists(f"{data["alert_id"]}"):
         consumer.commit(msg)
         print("already in redis")
-        continue #log!
+        es.index(index="logs",id=1,document={
+            "Level": "Warning",
+            "Source": "Classification",
+            "Content": f"alert_id: {data["alert_id"]} already sent",
+            "Timestamp": datetime.datetime.now()})
+        continue 
 
-    redis_client.set(name= redisKey, value= json.dumps(data["alert_id"]), ex= 20)
+    redis_client.set(name= redis_key, value= json.dumps(data["alert_id"]), ex= 20)
     print("set into redis")
 
     channel.basic_publish(exchange="", routing_key= f"{region}", body=json.dumps(data))
