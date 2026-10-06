@@ -18,6 +18,56 @@
           }
         }
       },
+      "Elastic.Clients.Elasticsearch/9.5.3": {
+        "type": "package",
+        "dependencies": {
+          "Elastic.Esql": "0.11.0",
+          "Elastic.Transport": "1.1.0"
+        },
+        "compile": {
+          "lib/net8.0/Elastic.Clients.Elasticsearch.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Elastic.Clients.Elasticsearch.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Elastic.Esql/0.11.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Text.Json": "10.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Elastic.Esql.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Elastic.Esql.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Elastic.Transport/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Diagnostics.DiagnosticSource": "10.0.0",
+          "System.Text.Json": "10.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Elastic.Transport.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Elastic.Transport.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "librdkafka.redist/2.15.1": {
         "type": "package",
         "build": {
@@ -834,6 +884,84 @@
         "lib/net8.0/Confluent.Kafka.xml",
         "lib/netstandard2.0/Confluent.Kafka.dll",
         "lib/netstandard2.0/Confluent.Kafka.xml"
+      ]
+    },
+    "Elastic.Clients.Elasticsearch/9.5.3": {
+      "sha512": "6hu5Xyf8N3TttOZHdz+hcbLv/4cxAKrN0g44sOz1ai0UNjED+Qa/MGgyP77HzR5VP/x1Ez40q1xk/Fn+HwaKTw==",
+      "type": "package",
+      "path": "elastic.clients.elasticsearch/9.5.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "elastic.clients.elasticsearch.9.5.3.nupkg.sha512",
+        "elastic.clients.elasticsearch.nuspec",
+        "lib/net10.0/Elastic.Clients.Elasticsearch.dll",
+        "lib/net10.0/Elastic.Clients.Elasticsearch.xml",
+        "lib/net462/Elastic.Clients.Elasticsearch.dll",
+        "lib/net462/Elastic.Clients.Elasticsearch.xml",
+        "lib/net8.0/Elastic.Clients.Elasticsearch.dll",
+        "lib/net8.0/Elastic.Clients.Elasticsearch.xml",
+        "lib/net9.0/Elastic.Clients.Elasticsearch.dll",
+        "lib/net9.0/Elastic.Clients.Elasticsearch.xml",
+        "lib/netstandard2.0/Elastic.Clients.Elasticsearch.dll",
+        "lib/netstandard2.0/Elastic.Clients.Elasticsearch.xml",
+        "lib/netstandard2.1/Elastic.Clients.Elasticsearch.dll",
+        "lib/netstandard2.1/Elastic.Clients.Elasticsearch.xml",
+        "nuget-icon.png"
+      ]
+    },
+    "Elastic.Esql/0.11.0": {
+      "sha512": "frYrulxZxDLsAk5vBw6oVG4dOYcGFSOPBsJ+1EfLn/sEB/fS56zVEbEitdVxreY3xREdhZwS9dtUkAqsAt037g==",
+      "type": "package",
+      "path": "elastic.esql/0.11.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "elastic.esql.0.11.0.nupkg.sha512",
+        "elastic.esql.nuspec",
+        "lib/net10.0/Elastic.Esql.dll",
+        "lib/net10.0/Elastic.Esql.pdb",
+        "lib/net10.0/Elastic.Esql.xml",
+        "lib/net8.0/Elastic.Esql.dll",
+        "lib/net8.0/Elastic.Esql.pdb",
+        "lib/net8.0/Elastic.Esql.xml",
+        "lib/netstandard2.0/Elastic.Esql.dll",
+        "lib/netstandard2.0/Elastic.Esql.pdb",
+        "lib/netstandard2.0/Elastic.Esql.xml",
+        "license.txt",
+        "nuget-icon.png"
+      ]
+    },
+    "Elastic.Transport/1.1.0": {
+      "sha512": "ITDBefOt0yZWakd6IiYl8RIw6D978CVvVEpLZaHOG8NSVtiPCLP6GkX+Ieu99wCBoXCYqhz8QBak6xRpycodAg==",
+      "type": "package",
+      "path": "elastic.transport/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "elastic.transport.1.1.0.nupkg.sha512",
+        "elastic.transport.nuspec",
+        "lib/net10.0/Elastic.Transport.dll",
+        "lib/net10.0/Elastic.Transport.pdb",
+        "lib/net10.0/Elastic.Transport.xml",
+        "lib/net462/Elastic.Transport.dll",
+        "lib/net462/Elastic.Transport.pdb",
+        "lib/net462/Elastic.Transport.xml",
+        "lib/net8.0/Elastic.Transport.dll",
+        "lib/net8.0/Elastic.Transport.pdb",
+        "lib/net8.0/Elastic.Transport.xml",
+        "lib/netstandard2.0/Elastic.Transport.dll",
+        "lib/netstandard2.0/Elastic.Transport.pdb",
+        "lib/netstandard2.0/Elastic.Transport.xml",
+        "lib/netstandard2.1/Elastic.Transport.dll",
+        "lib/netstandard2.1/Elastic.Transport.pdb",
+        "lib/netstandard2.1/Elastic.Transport.xml",
+        "license.txt",
+        "nuget-icon.png"
       ]
     },
     "librdkafka.redist/2.15.1": {
@@ -1958,6 +2086,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Confluent.Kafka >= 2.15.1",
+      "Elastic.Clients.Elasticsearch >= 9.5.3",
       "Microsoft.Extensions.Hosting >= 10.0.12"
     ]
   },
@@ -2013,6 +2142,10 @@
           "Confluent.Kafka": {
             "target": "Package",
             "version": "[2.15.1, )"
+          },
+          "Elastic.Clients.Elasticsearch": {
+            "target": "Package",
+            "version": "[9.5.3, )"
           },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",

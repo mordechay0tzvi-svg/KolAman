@@ -32,7 +32,7 @@ public class SouthHandler : IAlertHandler
         while (true)
         {
             var result = await channel.BasicConsumeAsync("SOUTH", autoAck: true, consumer: consumer);
-            var alert = JsonSerializer.Deserialize<Alert>(result.ToJson());
+            var alert = JsonSerializer.Deserialize<Alert>(result);
             if (alert != null)
             {
                 _context.SouthAlerts.Add(alert);

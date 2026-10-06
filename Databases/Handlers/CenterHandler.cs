@@ -31,7 +31,7 @@ public class CenterHandler : IAlertHandler
         while (true)
         {
             var result = await channel.BasicConsumeAsync("CENTER", autoAck: true, consumer: consumer);
-            var alert = JsonSerializer.Deserialize<Alert>(result.ToJson());
+            var alert = JsonSerializer.Deserialize<Alert>(result);
             if (alert != null)
             {
                 _context.CenterAlerts.Add(alert);

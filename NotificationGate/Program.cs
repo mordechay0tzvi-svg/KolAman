@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using Confluent.Kafka;
+using Elastic.Clients.Elasticsearch;
+
 using Models;
 
 namespace Main;
@@ -24,6 +26,7 @@ class MyClassCS
         Console.WriteLine("Press enter to exit.");
         Console.ReadLine();
     }
+
     private static void OnCreated(object sender, FileSystemEventArgs e)
     {
         var config = new ProducerConfig{BootstrapServers = "localhost:9092"};

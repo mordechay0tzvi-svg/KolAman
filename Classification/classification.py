@@ -76,7 +76,12 @@ while True:
     
     if is_alert_data_valid(data) != "":
         print("skipped alert")
-        continue # + dont forget log!
+        es.index(index= "logs", id=1, document={
+            "Level": "Warning",
+            "Source": "Classification",
+            "Content": f"alert_id: {data["alert_id"]} is not valid",
+            "Timestamp": datetime.datetime.now()})
+        continue
 
     if redis_client.exists(f"{data["alert_id"]}"):
         consumer.commit(msg)
