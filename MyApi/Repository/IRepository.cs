@@ -10,4 +10,5 @@ public interface IRepository
     ByPriorityDto GetByPriority();
     ByStatusDto GetByStatus();
     string GetHottestSector();
+    Task<IEnumerable<specificDayDto>> specificDay(int month, int day, string sector);
 }

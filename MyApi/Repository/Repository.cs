@@ -1,9 +1,11 @@
-using System.ComponentModel.DataAnnotations;
 using Dtos;
-using Microsoft.EntityFrameworkCore;
-using Models;
 using DataContext;
 namespace Repositories;
+
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Models;
+
 public class Repository : IRepository
 {
     private readonly Context _db;
@@ -65,6 +67,7 @@ public class Repository : IRepository
         
         double avgNorthAlertScore = northScore / _db.NorthAlerts.Select(a => a).Count();
 
+
         var centerScore = 0;
         centerScore += _db.CenterAlerts.Where(a => a.priority == "LOW").Count() * lowPriorityScore;
         centerScore += _db.CenterAlerts.Where(a => a.priority == "MEDIUM").Count() * mediumPriorityScore;
@@ -82,6 +85,7 @@ public class Repository : IRepository
 
         double avgOverseasAlertScore = overseasScore / _db.OverseasAlerts.Select(a => a).Count();
 
+
         Dictionary<string, double> allScores = new Dictionary<string, double>();
         allScores.Add("south", avgSouthAlertScore);
         allScores.Add("north", avgNorthAlertScore);
@@ -92,5 +96,34 @@ public class Repository : IRepository
         var hottestSectorName = allScores.FirstOrDefault(s => s.Value == hottestSectorScore);
         return hottestSectorName.Key;
     }
-
+    public async Task<IEnumerable<specificDayDto>> specificDay(int month, int day, string sector)
+    {
+        List<Alert> alerts = new();
+        if (sector == "north")
+        {
+            alerts = await _db.NorthAlerts.ToListAsync();
+        }
+        if (sector == "south")
+        {
+            alerts = await _db.SouthAlerts.ToListAsync();
+        }
+        if (sector == "center")
+        {
+            alerts = await _db.CenterAlerts.ToListAsync();
+        }
+        if (sector == "overseas")
+        {
+            alerts = await _db.OverseasAlerts.ToListAsync();
+        }
+        else
+        {
+            return default!;
+        }
+        return alerts.Where(a => a.timestamp.Day == day && a.timestamp.Month == month)
+        .Select(a => new specificDayDto{
+            source = a.source,
+            title = a.title,
+            content = a.content,
+            timestamp = a.timestamp});
+    }
 }

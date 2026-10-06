@@ -31,4 +31,14 @@ public class StationsController : ControllerBase
     {
         return Ok(_repository.GetHottestSector());
     }
+    [HttpGet("SearchASpecificDate")]
+    public async Task<ActionResult<IEnumerable<specificDayDto>>> specificDay([FromQuery] int month, [FromQuery] int day, [FromQuery] string sector)
+    {
+        var sectors = new List<string>{"north", "south", "center", "overseas"};
+        if (!sectors.Contains(sector))
+        {
+            return BadRequest("Not a valid region");
+        }
+        return Ok(await _repository.specificDay(month, day, sector));
+    }
 }
