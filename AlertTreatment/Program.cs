@@ -12,7 +12,7 @@ builder.Services.AddDbContext<Context>(options => options.UseMySql(connectionStr
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())  
 {
     var context = scope.ServiceProvider.GetRequiredService<Context>();
     while (true)
