@@ -5,14 +5,15 @@ using MySqlContext;
 using RabbitMQ.Client;
 using System.Text.Json;
 using RabbitMQ.Client.Events;
-using MongoDB.Bson;
-
+using Elastic.Clients.Elasticsearch;
 public class CenterHandler : IAlertHandler
 {
+    private readonly ElasticsearchClient _es;
     private readonly Context _context;
-    public CenterHandler (Context context)
+    public CenterHandler (Context context, string elasticUri)
     {
         _context = context;
+        _es = new ElasticsearchClient(new ElasticsearchClientSettings(new Uri(elasticUri)));
     }
     public async Task HandleAsync()
     {
@@ -33,9 +34,24 @@ public class CenterHandler : IAlertHandler
             var result = await channel.BasicConsumeAsync("CENTER", autoAck: true, consumer: consumer);
             var alert = JsonSerializer.Deserialize<Alert>(result);
             if (alert != null)
-            {
+            {if (alert.priority == "CRITICAL")
+                {
+                    await _es.IndexAsync(new {
+                    Level = "Warning",
+                    Source = "Center db handler ",
+                    Content = "notice! a critical alert has arrived",
+                    Timestamp = DateTime.Now
+                    }, x => x.Index("logs").Id(1));
+                }
                 _context.CenterAlerts.Add(alert);
+                continue;
             }
+            await _es.IndexAsync(new {
+                    Level = "Warning",
+                    Source = "Center db handler ",
+                    Content = "failed to read alert",
+                    Timestamp = DateTime.Now
+                    }, x => x.Index("logs").Id(1));
         }
     }
 }

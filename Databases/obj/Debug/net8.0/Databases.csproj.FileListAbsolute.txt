@@ -132,3 +132,6 @@ C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\Databases\bin\Debug\ne
 C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\Databases\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\Databases\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\Databases\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\Databases\bin\Debug\net8.0\Elastic.Clients.Elasticsearch.dll
+C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\Databases\bin\Debug\net8.0\Elastic.Esql.dll
+C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\Databases\bin\Debug\net8.0\Elastic.Transport.dll

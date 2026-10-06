@@ -6,14 +6,16 @@ using RabbitMQ.Client.Events;
 using MySqlContext;
 using System.Text;
 using System.Text.Json;
-using MongoDB.Bson;
+using Elastic.Clients.Elasticsearch;
 
 public class OverseasHandler : IAlertHandler
 {
+    private readonly ElasticsearchClient _es;
     private readonly Context _context;
-    public OverseasHandler (Context context)
+    public OverseasHandler (Context context, string elasticUri)
     {
         _context = context;
+        _es = new ElasticsearchClient(new ElasticsearchClientSettings(new Uri(elasticUri)));
     }
     public async Task HandleAsync()
     {
@@ -35,8 +37,24 @@ public class OverseasHandler : IAlertHandler
             var alert = JsonSerializer.Deserialize<Alert>(result);
             if (alert != null)
             {
-                _context.OverseasAlerts.Add(alert);
+                if (alert.priority == "CRITICAL")
+                {
+                    await _es.IndexAsync(new {
+                    Level = "Warning",
+                    Source = "Overseas db handler ",
+                    Content = "notice! a critical alert has arrived",
+                    Timestamp = DateTime.Now
+                    }, x => x.Index("logs").Id(1));
+                }
+                _context.NorthAlerts.Add(alert);
+                continue;
             }
+            await _es.IndexAsync(new {
+                    Level = "Warning",
+                    Source = "Overseas db handler ",
+                    Content = "failed to read alert",
+                    Timestamp = DateTime.Now
+                    }, x => x.Index("logs").Id(1));
         }
     }
 }
