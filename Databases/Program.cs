@@ -1,20 +1,20 @@
 ﻿using Models;
-using Mongo;
+using MySqlContext;
 using Rabbit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.Services.AddSingleton<MongoService>();
+string? connectionString = builder.Configuration.GetConnectionString("ConnectionStrings:DefaultConnection");
+ServerVersion? serverVersion =  ServerVersion.AutoDetect(connectionString);
+builder.Services.AddDbContext<Context>(options => options.UseMySql(connectionString,serverVersion));builder.Services.AddSingleton<RabbitMqService>();
+
 builder.Services.AddSingleton<RabbitMqService>();
 var app = builder.Build();
 
-var mongo = app.Services.GetRequiredService<MongoService>();
 var rabbit = app.Services.GetRequiredService<RabbitMqService>();
 
-while (true)
-{
-   var result = await rabbit.ConsumeAsync(); 
-}
 

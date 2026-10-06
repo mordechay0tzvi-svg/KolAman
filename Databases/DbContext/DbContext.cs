@@ -1,8 +1,8 @@
 using Models;
 using Microsoft.EntityFrameworkCore;
-namespace Context;
-public class AppDbContext : DbContext
+namespace MySqlContext;
+public class Context : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options): base(options){}
+    public Context(DbContextOptions<Context> options): base(options){}
     public DbSet<Alert> Alerts => Set<Alert>();
 }
