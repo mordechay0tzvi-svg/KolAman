@@ -31,27 +31,41 @@ public class CenterHandler : IAlertHandler
         };
         while (true)
         {
-            var result = await channel.BasicConsumeAsync("CENTER", autoAck: true, consumer: consumer);
-            var alert = JsonSerializer.Deserialize<Alert>(result);
-            if (alert != null)
-            {if (alert.priority == "CRITICAL")
+            try
+            {    
+                var result = await channel.BasicConsumeAsync("CENTER", autoAck: true, consumer: consumer);
+                var alert = JsonSerializer.Deserialize<Alert>(result);
+                if (alert != null)
                 {
-                    await _es.IndexAsync(new {
-                    Level = "Warning",
-                    Source = "Center db handler ",
-                    Content = "notice! a critical alert has arrived",
-                    Timestamp = DateTime.Now
-                    }, x => x.Index("logs").Id(1));
+                    if (alert.priority == "CRITICAL")
+                    {
+                        await _es.IndexAsync(new {
+                        Level = "Warning",
+                        Source = "Center db handler ",
+                        Content = "notice! a critical alert has arrived",
+                        Timestamp = DateTime.Now
+                        }, x => x.Index("logs").Id(1));
+                    }
+                    _context.CenterAlerts.Add(alert);
+                    continue;
                 }
-                _context.CenterAlerts.Add(alert);
-                continue;
-            }
-            await _es.IndexAsync(new {
+                await _es.IndexAsync(new {
                     Level = "Warning",
                     Source = "Center db handler ",
                     Content = "failed to read alert",
                     Timestamp = DateTime.Now
                     }, x => x.Index("logs").Id(1));
+            }
+            catch(Exception e)
+            {
+                await _es.IndexAsync(new {
+                        Level = "Warning",
+                        Source = "Center db handler ",
+                        Content = $"{e.Message}",
+                        Timestamp = DateTime.Now
+                        }, x => x.Index("logs").Id(1));
+                continue;
+            }
         }
     }
 }

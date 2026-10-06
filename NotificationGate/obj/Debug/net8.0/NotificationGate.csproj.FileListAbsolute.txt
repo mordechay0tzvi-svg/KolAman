@@ -77,3 +77,6 @@ C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\NotificationGate\obj\D
 C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\NotificationGate\obj\Debug\net8.0\NotificationGate.pdb
 C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\NotificationGate\obj\Debug\net8.0\NotificationGate.genruntimeconfig.cache
 C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\NotificationGate\obj\Debug\net8.0\ref\NotificationGate.dll
+C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\NotificationGate\bin\Debug\net8.0\Elastic.Clients.Elasticsearch.dll
+C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\NotificationGate\bin\Debug\net8.0\Elastic.Esql.dll
+C:\Users\User\Desktop\הכשרה\Weekend projects\KolAman\NotificationGate\bin\Debug\net8.0\Elastic.Transport.dll

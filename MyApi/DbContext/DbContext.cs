@@ -1,6 +1,5 @@
 using Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace MySqlContext;
 public class Context : DbContext
 {

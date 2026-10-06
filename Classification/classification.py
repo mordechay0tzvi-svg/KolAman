@@ -61,7 +61,7 @@ def is_alert_data_valid(data) -> str:
         result += "invalid source"
     return result
 
-es = Elasticsearch()
+es = Elasticsearch("http://localhost:9200")
 
 while True:
     msg = consumer.poll()

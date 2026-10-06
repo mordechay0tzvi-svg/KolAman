@@ -32,28 +32,41 @@ public class NorthHandler : IAlertHandler
         };
         while (true)
         {
-            var result = await channel.BasicConsumeAsync("NORTH", autoAck: true, consumer: consumer);
-            var alert = JsonSerializer.Deserialize<Alert>(result);
-            if (alert != null)
-            {
-             if (alert.priority == "CRITICAL")
+            try
+            {   
+                var result = await channel.BasicConsumeAsync("NORTH", autoAck: true, consumer: consumer);
+                var alert = JsonSerializer.Deserialize<Alert>(result);
+                if (alert != null)
                 {
-                    await _es.IndexAsync(new {
-                    Level = "Warning",
-                    Source = "North db handler ",
-                    Content = "notice! a critical alert has arrived",
-                    Timestamp = DateTime.Now
-                    }, x => x.Index("logs").Id(1));
+                if (alert.priority == "CRITICAL")
+                    {
+                        await _es.IndexAsync(new {
+                        Level = "Warning",
+                        Source = "North db handler ",
+                        Content = "notice! a critical alert has arrived",
+                        Timestamp = DateTime.Now
+                        }, x => x.Index("logs").Id(1));
+                    }
+                    _context.NorthAlerts.Add(alert);
+                    continue;
                 }
-                _context.NorthAlerts.Add(alert);
+                await _es.IndexAsync(new {
+                        Level = "Warning",
+                        Source = "North db handler ",
+                        Content = "failed to read alert",
+                        Timestamp = DateTime.Now
+                        }, x => x.Index("logs").Id(1));
+            }
+            catch(Exception e)
+            {
+                await _es.IndexAsync(new {
+                        Level = "Warning",
+                        Source = "North db handler ",
+                        Content = $"{e.Message}",
+                        Timestamp = DateTime.Now
+                        }, x => x.Index("logs").Id(1));
                 continue;
             }
-            await _es.IndexAsync(new {
-                    Level = "Warning",
-                    Source = "North db handler ",
-                    Content = "failed to read alert",
-                    Timestamp = DateTime.Now
-                    }, x => x.Index("logs").Id(1));
         }
     }
 }

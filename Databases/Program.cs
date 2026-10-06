@@ -14,10 +14,10 @@ builder.Services.AddDbContext<Context>(options => options.UseMySql(connectionStr
 
 const string elasticUri = "http://localhost:9200";
 
-builder.Services.AddScoped<IAlertHandler>(sp => new SouthHandler(sp.GetRequiredService<Context>(), elasticUri));
-builder.Services.AddScoped<IAlertHandler>(sp => new NorthHandler(sp.GetRequiredService<Context>(), elasticUri));
-builder.Services.AddScoped<IAlertHandler>(sp => new CenterHandler(sp.GetRequiredService<Context>(), elasticUri));
-builder.Services.AddScoped<IAlertHandler>(sp => new OverseasHandler(sp.GetRequiredService<Context>(), elasticUri));
+builder.Services.AddScoped<SouthHandler>(sp => new SouthHandler(sp.GetRequiredService<Context>(), elasticUri));
+builder.Services.AddScoped<NorthHandler>(sp => new NorthHandler(sp.GetRequiredService<Context>(), elasticUri));
+builder.Services.AddScoped<CenterHandler>(sp => new CenterHandler(sp.GetRequiredService<Context>(), elasticUri));
+builder.Services.AddScoped<OverseasHandler>(sp => new OverseasHandler(sp.GetRequiredService<Context>(), elasticUri));
 
 var app = builder.Build();
 
