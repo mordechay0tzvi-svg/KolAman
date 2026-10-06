@@ -3,26 +3,23 @@ using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
+
 public class RabbitMqService 
 {
     private readonly IConnection _connection;
     public RabbitMqService(IConfiguration configuration)
     {
-        var host = configuration["Rabbit:host"] ?? "localhost";
+        var host = configuration["Rabbit:Host"] ?? "localhost";
         var factory = new ConnectionFactory
         {
             HostName = host,
         };
         _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
     }
-    public async Task ConsumeAsync(string queue)
+    public async Task<string> ConsumeAsync(string queue)
     {
-        var channel = await _connection.CreateChannelAsync();
-        await channel.QueueDeclareAsync(
-            queue,
-            durable: true,
-            exclusive: false,
-            autoDelete: false);
+        c
 
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += async (_, ea) =>
@@ -42,7 +39,7 @@ public class RabbitMqService
                     requeue: true);
             }
         };
-        await channel.BasicConsumeAsync(
+        return await channel.BasicConsumeAsync(
             queue: queue,
             autoAck: false,
             consumer: consumer);
