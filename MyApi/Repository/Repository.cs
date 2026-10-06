@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using Dtos;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using MySqlContext;
-namespace Repository;
-public class Repository
+using DataContext;
+namespace Repositories;
+public class Repository : IRepository
 {
     private readonly Context _db;
     public Repository (Context db)
